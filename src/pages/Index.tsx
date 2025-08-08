@@ -25,7 +25,22 @@ const Index = () => {
       toast.success(`Analyzed via ${data?.provider ?? "provider"}`);
     } catch (err: any) {
       console.error(err);
-      toast.error(err?.message || "Analysis failed");
+      // Fallback to Puter.js in the browser if available
+      try {
+        const p = (window as any)?.puter;
+        if (p?.ai?.chat) {
+          const text = await p.ai.chat(prompt, { model: "gpt-4.1-nano" });
+          if (text) {
+            setOutput(typeof text === "string" ? text : String(text));
+            toast.success("Analyzed via Puter.js fallback");
+            return;
+          }
+        }
+        throw err;
+      } catch (fallbackErr: any) {
+        console.error("Puter.js fallback failed:", fallbackErr);
+        toast.error(err?.message || "Analysis failed");
+      }
     } finally {
       setLoading(false);
     }

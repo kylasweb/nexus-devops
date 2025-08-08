@@ -11,8 +11,8 @@ interface AiReportRequest {
 }
 
 async function tryOpenAI(prompt: string) {
-  const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
-  if (!OPENAI_API_KEY) return { ok: false, provider: "openai", error: "OPENAI_API_KEY not set" };
+  const OPENAI_API_KEY = Deno.env.get("OPENAI");
+  if (!OPENAI_API_KEY) return { ok: false, provider: "openai", error: "OPENAI not set" };
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -21,7 +21,7 @@ async function tryOpenAI(prompt: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4.1-2025-04-14",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: "You are an expert analyst that produces concise, actionable reports." },
           { role: "user", content: prompt },
@@ -41,8 +41,8 @@ async function tryOpenAI(prompt: string) {
 }
 
 async function tryOpenRouter(prompt: string) {
-  const OPENROUTER_API_KEY = Deno.env.get("OPENROUTER_API_KEY");
-  if (!OPENROUTER_API_KEY) return { ok: false, provider: "openrouter", error: "OPENROUTER_API_KEY not set" };
+  const OPENROUTER_API_KEY = Deno.env.get("OPENROUTER");
+  if (!OPENROUTER_API_KEY) return { ok: false, provider: "openrouter", error: "OPENROUTER not set" };
   try {
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
@@ -71,8 +71,8 @@ async function tryOpenRouter(prompt: string) {
 }
 
 async function tryGemini(prompt: string) {
-  const GEMINI_KEY = Deno.env.get("GOOGLE_GEMINI_API_KEY");
-  if (!GEMINI_KEY) return { ok: false, provider: "gemini", error: "GOOGLE_GEMINI_API_KEY not set" };
+  const GEMINI_KEY = Deno.env.get("GEMINI");
+  if (!GEMINI_KEY) return { ok: false, provider: "gemini", error: "GEMINI not set" };
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
     const res = await fetch(url, {
@@ -99,8 +99,8 @@ async function tryGemini(prompt: string) {
 }
 
 async function tryHuggingFace(prompt: string) {
-  const HF_TOKEN = Deno.env.get("HUGGING_FACE_ACCESS_TOKEN");
-  if (!HF_TOKEN) return { ok: false, provider: "huggingface", error: "HUGGING_FACE_ACCESS_TOKEN not set" };
+  const HF_TOKEN = Deno.env.get("HUGGINGFACE");
+  if (!HF_TOKEN) return { ok: false, provider: "huggingface", error: "HUGGINGFACE not set" };
   try {
     // Using a widely available instruct model
     const model = "mistralai/Mixtral-8x7B-Instruct-v0.1";
@@ -134,8 +134,8 @@ async function tryHuggingFace(prompt: string) {
 }
 
 async function tryReplicate(prompt: string) {
-  const REPLICATE_API_KEY = Deno.env.get("REPLICATE_API_KEY");
-  if (!REPLICATE_API_KEY) return { ok: false, provider: "replicate", error: "REPLICATE_API_KEY not set" };
+  const REPLICATE_API_KEY = Deno.env.get("REPLICATE");
+  if (!REPLICATE_API_KEY) return { ok: false, provider: "replicate", error: "REPLICATE not set" };
   try {
     // Use Replicate text generation model
     const res = await fetch("https://api.replicate.com/v1/models/meta/meta-llama-3-8b-instruct/predictions", {
